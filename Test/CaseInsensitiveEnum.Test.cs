@@ -18,41 +18,28 @@ namespace Test
         class TestClass {
             public TestEnum Test { get; set; }
         }
+        
+            private JsonSerializerOptions options = new()
+            {
+                Converters = { new CaseInsensitiveEnumConverter() },
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
 
         [TestMethod]
         public void Should_Deserialize_Enum_First_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
             var converted = JsonSerializer.Deserialize<TestEnum>(@"""A""", options);
 
             converted.Should().Be(TestEnum.a);
         }
         [TestMethod]
         public void Should_Deserialize_Enum_Second_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
             var converted = JsonSerializer.Deserialize<TestEnum>(@"""B""", options);
 
             converted.Should().Be(TestEnum.b);
         }
         [TestMethod]
         public void Should_Deserialize_Enum_Any_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-                AllowTrailingCommas = true,
-                PropertyNameCaseInsensitive = true,
-            };
             var converted = JsonSerializer.Deserialize<TestEnum>(@"""C""", options);
 
             converted.Should().Be(TestEnum.c);
@@ -60,12 +47,6 @@ namespace Test
 
         [TestMethod]
         public void Should_Deserialize_Enum_Property_First_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
             var expectation = new
             {
                 Test = TestEnum.a,
@@ -78,12 +59,6 @@ namespace Test
 
         [TestMethod]
         public void Should_Deserialize_Enum_Property_Second_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
             var expectation = new
             {
                 Test = TestEnum.b,
@@ -96,12 +71,6 @@ namespace Test
 
         [TestMethod]
         public void Should_Deserialize_Enum_Property_Any_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
             var expectation = new
             {
                 Test = TestEnum.c,
@@ -114,12 +83,6 @@ namespace Test
 
         [TestMethod]
         public void Should_Deserialize_String_Enum_Property_First_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
             var expectation = new
             {
                 Test = TestEnum.a.ToString().ToUpper(),
@@ -135,12 +98,6 @@ namespace Test
 
         [TestMethod]
         public void Should_Deserialize_String_Enum_Property_Second_Value() {
-            var options = new JsonSerializerOptions
-            {
-                Converters = { new CaseInsensitiveEnumConverter() },
-                PropertyNameCaseInsensitive = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            };
             var expectation = new
             {
                 Test = TestEnum.b.ToString().ToUpper(),
@@ -156,12 +113,6 @@ namespace Test
 
         [TestMethod]
         public void Should_Deserialize_String_Enum_Property_Any_Value() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
             var expectation = new
             {
                 Test = TestEnum.c.ToString().ToUpper(),
@@ -173,6 +124,42 @@ namespace Test
             {
                 Test = TestEnum.c,
             });
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_String_Enum_ToString_First_Value() {
+            var input = new TestClass()
+            {
+                Test = TestEnum.a,
+            };
+            
+            var converted = JsonSerializer.Serialize(input, options);
+
+            converted.Should().BeEquivalentTo("{\"test\":\"a\"}");
+        }
+
+        [TestMethod]
+        public void Should_Serialize_String_Enum_ToString_Second_Value() {
+            var input = new TestClass()
+            {
+                Test = TestEnum.b,
+            };
+            
+            var converted = JsonSerializer.Serialize(input, options);
+
+            converted.Should().BeEquivalentTo("{\"test\":\"b\"}");
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_String_Enum_ToString_Any_Value() {
+            var input = new TestClass()
+            {
+                Test = TestEnum.c,
+            };
+            
+            var converted = JsonSerializer.Serialize(input, options);
+
+            converted.Should().BeEquivalentTo("{\"test\":\"c\"}");
         }
     }
 }

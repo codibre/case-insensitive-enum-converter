@@ -15,10 +15,7 @@ namespace Codibre.CaseInsensitiveEnum
             TypeRef = type;
         }
 
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeToConvert == TypeRef;
-        }
+        public override bool CanConvert(Type typeToConvert) => typeToConvert == TypeRef;
 
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

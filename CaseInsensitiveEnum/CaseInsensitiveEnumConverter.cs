@@ -9,10 +9,7 @@ namespace Codibre.CaseInsensitiveEnum
     {
         private static Type converterType = typeof(CaseInsensitiveSingleEnumConverter<>);
         private static Dictionary<Type, JsonConverter> Converters = new Dictionary<Type, JsonConverter>();
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeToConvert.IsEnum;
-        }
+        public override bool CanConvert(Type typeToConvert) => typeToConvert.IsEnum;
 
         public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
