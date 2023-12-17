@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>JsonSerializer;Serialize;Deserialize;Enum;CaseInsensitive;Case;Insensitive</PackageTags>
+    <IsPackable>true</IsPackable>
+    <RepositoryUrl>https://github.com/codibre/dotnet-case-insensitive-enum.git</RepositoryUrl> 
+    <RepositoryType>git</RepositoryType>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  </ItemGroup>
+</Project>
