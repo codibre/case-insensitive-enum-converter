@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Codibre.DictionaryChain
+namespace Codibre.CaseInsensitiveEnum
 {
     /// <summary>
     /// ChainKeyType offers the possibility to have three different type of

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Codibre.CaseInsensitiveEnum;
+using Newtonsoft.Json.Serialization;
 
 namespace Test
 {
@@ -14,12 +15,24 @@ namespace Test
             c,
         }
 
-        class DeseTest {
+        class TestClass {
             public TestEnum Test { get; set; }
         }
 
         [TestMethod]
-        public void EnumTest() {
+        public void Should_Deserialize_Enum_First_Value() {
+            var test = new CaseInsensitiveEnumConverter();
+            var options = new JsonSerializerOptions
+            {
+                Converters = { test },
+                WriteIndented = true,
+            };
+            var converted = JsonSerializer.Deserialize<TestEnum>(@"""A""", options);
+
+            converted.Should().Be(TestEnum.a);
+        }
+        [TestMethod]
+        public void Should_Deserialize_Enum_Second_Value() {
             var test = new CaseInsensitiveEnumConverter();
             var options = new JsonSerializerOptions
             {
@@ -31,19 +44,7 @@ namespace Test
             converted.Should().Be(TestEnum.b);
         }
         [TestMethod]
-        public void EnumTest2() {
-            var test = new CaseInsensitiveEnumConverter();
-            var options = new JsonSerializerOptions
-            {
-                Converters = { test },
-                WriteIndented = true,
-            };
-            var converted = JsonSerializer.Deserialize<TestEnum>(@"""A""", options);
-
-            converted.Should().Be(TestEnum.a);
-        }
-        [TestMethod]
-        public void EnumTest3() {
+        public void Should_Deserialize_Enum_Any_Value() {
             var test = new CaseInsensitiveEnumConverter();
             var options = new JsonSerializerOptions
             {
@@ -52,9 +53,126 @@ namespace Test
                 AllowTrailingCommas = true,
                 PropertyNameCaseInsensitive = true,
             };
-            var converted = JsonSerializer.Deserialize<TestEnum>(@"""A""", options);
+            var converted = JsonSerializer.Deserialize<TestEnum>(@"""C""", options);
 
-            converted.Should().Be(TestEnum.a);
+            converted.Should().Be(TestEnum.c);
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_Enum_Property_First_Value() {
+            var test = new CaseInsensitiveEnumConverter();
+            var options = new JsonSerializerOptions
+            {
+                Converters = { test },
+                WriteIndented = true,
+            };
+            var expectation = new
+            {
+                Test = TestEnum.a,
+            };
+            
+            var converted = JsonSerializer.Deserialize<TestClass>(JsonSerializer.Serialize(expectation), options);
+
+            converted.Should().BeEquivalentTo(expectation);
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_Enum_Property_Second_Value() {
+            var test = new CaseInsensitiveEnumConverter();
+            var options = new JsonSerializerOptions
+            {
+                Converters = { test },
+                WriteIndented = true,
+            };
+            var expectation = new
+            {
+                Test = TestEnum.b,
+            };
+
+            var converted = JsonSerializer.Deserialize<TestClass>(JsonSerializer.Serialize(expectation), options);
+
+            converted.Should().BeEquivalentTo(expectation);
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_Enum_Property_Any_Value() {
+            var test = new CaseInsensitiveEnumConverter();
+            var options = new JsonSerializerOptions
+            {
+                Converters = { test },
+                WriteIndented = true,
+            };
+            var expectation = new
+            {
+                Test = TestEnum.c,
+            };
+
+            var converted = JsonSerializer.Deserialize<TestClass>(JsonSerializer.Serialize(expectation), options);
+
+            converted.Should().BeEquivalentTo(expectation);
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_String_Enum_Property_First_Value() {
+            var test = new CaseInsensitiveEnumConverter();
+            var options = new JsonSerializerOptions
+            {
+                Converters = { test },
+                WriteIndented = true,
+            };
+            var expectation = new
+            {
+                Test = TestEnum.a.ToString().ToUpper(),
+            };
+            
+            var converted = JsonSerializer.Deserialize<TestClass>(JsonSerializer.Serialize(expectation), options);
+
+            converted.Should().BeEquivalentTo(new
+            {
+                Test = TestEnum.a,
+            });
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_String_Enum_Property_Second_Value() {
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new CaseInsensitiveEnumConverter() },
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            var expectation = new
+            {
+                Test = TestEnum.b.ToString().ToUpper(),
+            };
+
+            var converted = JsonSerializer.Deserialize<TestClass>(JsonSerializer.Serialize(expectation), options);
+
+            converted.Should().BeEquivalentTo(new
+            {
+                Test = TestEnum.b,
+            });
+        }
+
+        [TestMethod]
+        public void Should_Deserialize_String_Enum_Property_Any_Value() {
+            var test = new CaseInsensitiveEnumConverter();
+            var options = new JsonSerializerOptions
+            {
+                Converters = { test },
+                WriteIndented = true,
+            };
+            var expectation = new
+            {
+                Test = TestEnum.c.ToString().ToUpper(),
+            };
+
+            var converted = JsonSerializer.Deserialize<TestClass>(JsonSerializer.Serialize(expectation), options);
+
+            converted.Should().BeEquivalentTo(new
+            {
+                Test = TestEnum.c,
+            });
         }
     }
 }

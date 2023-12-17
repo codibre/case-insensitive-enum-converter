@@ -12,7 +12,7 @@
   ],
   "preset": "angular",
   "npmPublish": false,
-  "projectPath": "DictionaryChain/Codibre.DictionaryChain.csproj",
+  "projectPath": "CaseInsensitiveEnum/Codibre.CaseInsensitiveEnum.csproj",
   "usePackageVersion": true,
   "files": [
     {
